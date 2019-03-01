@@ -1,0 +1,24 @@
+{
+    "name": "vMaker/html",
+    "license": "MIT",
+
+    "authors": [
+        {
+            "name": "Veplex Sistemas de Informação",
+            "email": "comercial@veplex.com.br"
+        }
+    ],
+    "require": {
+        "php": ">=7.0.0",
+	"laravelcollective/html": "^5.2.0"
+    },
+
+    "autoload": {
+        "psr-4": {
+            "vMaker\\Html\\": "src/"
+        }
+    },
+
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
