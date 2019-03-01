@@ -76,7 +76,13 @@
      * @var string
      */
     protected $divName = "form-group";
-
+    
+    /**
+     * JS style
+     * @var string
+     */
+    protected $style;
+    
     /**
      * @var string
      */
@@ -128,6 +134,9 @@
       
       if (strlen(trim($this->placeholder)))
         $this->arrExtra = array_merge(['placeholder' => $this->placeholder], $this->arrExtra);
+      
+      if (strlen($this->style))
+        $this->arrExtra = array_merge(['style' => $this->style], $this->arrExtra);
     }
     
     /**
@@ -232,5 +241,13 @@
     function setDivName($divName)
     {
       $this->divName = $divName;
+    }
+    
+    /**
+     * @param string $style
+     */
+    function setStyle($style)
+    {
+      $this->style = $style;
     }
   }
