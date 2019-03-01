@@ -91,7 +91,7 @@
     /**
      * @var array
      */
-    protected $arrExtra;
+    protected $arrExtra = array();
     
     /**
      * Constructor
@@ -118,7 +118,7 @@
       if (strlen(trim($this->label)))
         $this->output .= "<label for=\"{$this->id}\">{$this->label}</label>";
       
-      $this->arrExtra = ['id' => $this->id, 'class' => $this->class];
+      $this->arrExtra = array_merge(['id' => $this->id, 'class' => $this->class], $this->arrExtra);
       
       if ($this->disabled)
         $this->arrExtra = array_merge(['disabled'], $this->arrExtra);
