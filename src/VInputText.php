@@ -1,11 +1,11 @@
 <?php
   namespace vmaker\html;
   
-  use vmaker\html\vObject;
+  use vmaker\html\VObject;
   
   use Collective\Html\FormFacade as Form;
   
-  class vInputText extends vObject
+  class VInputText extends VObject
   {
     protected $placeholder;
     

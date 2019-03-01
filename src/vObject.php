@@ -4,7 +4,7 @@
   /**
    * @author Veplex Sistemas de Informação
    */
-  abstract class vObject
+  abstract class VObject
   {
     /**
      * Object id
