@@ -6,9 +6,9 @@
   use Collective\Html\FormFacade as Form;
   
   /**
-   * Input DateTime Html
+   * Input Hidden Html
    */
-  class VInputDateTime extends VObject
+  class VInputHidden extends VObject
   {
     /**
      * Constructor
@@ -18,6 +18,7 @@
     public function __construct($id, $defaultValue = null)
     {
       parent::__construct($id, $defaultValue);
+      $this->setUseDiv(false);
     }
     
     /**
@@ -26,7 +27,7 @@
     public function make()
     {
       parent::make();
-      $this->output .= Form::datetimeLocal($this->name, $this->defaultValue, $this->arrExtra);
+      $this->output .= Form::text($this->name, $this->defaultValue, $this->arrExtra);
       
       if ($this->useDiv)
         $this->output .= "</div>";
