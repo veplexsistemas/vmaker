@@ -26,7 +26,7 @@
     public function make()
     {
       parent::make();
-      $this->output .= Form::text($this->name, $this->defaultValue, $this->arrExtra);
+      $this->output .= Form::email($this->name, $this->defaultValue, $this->arrExtra);
       
       if ($this->useDiv)
         $this->output .= "</div>";
