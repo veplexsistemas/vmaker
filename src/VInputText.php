@@ -5,10 +5,11 @@
   
   use Collective\Html\FormFacade as Form;
   
+  /**
+   * Input Text Html
+   */
   class VInputText extends VObject
   {
-    protected $placeholder;
-    
     public function __construct($id, $defaultValue = null)
     {
       parent::__construct($id, $defaultValue);
@@ -17,16 +18,8 @@
     public function make()
     {
       parent::make();
+      $this->output .= Form::text($this->name, $this->defaultValue, $this->arrExtra) . "</div>";
       
-      $arrExtra = ['id' => $this->id, 'class' => $this->class];
-      $this->output .= Form::text($this->name, $this->defaultValue, $arrExtra) . "</div>";
-      
-      return $this->output;
+      echo $this->output;
     }
-    
-    function setPlaceholder($placeholder)
-    {
-      $this->placeholder = $placeholder;
-    }
-    
   }

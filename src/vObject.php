@@ -2,6 +2,7 @@
   namespace VMaker;
   
   /**
+   * Base class for to make html elements
    * @author Veplex Sistemas de Informação
    */
   abstract class VObject
@@ -22,7 +23,7 @@
      * Object class
      * @var string
      */
-    protected $class;
+    protected $class = "";
     
     /**
      * Object Label
@@ -37,9 +38,44 @@
     protected $defaultValue;
     
     /**
+     * @var boolean
+     */
+    protected $readonly;
+    
+    /**
+     * @var boolean
+     */
+    protected $disabled;
+    
+    /**
+     * @var int
+     */
+    protected $size;
+    
+    /**
+     * @var int
+     */
+    protected $maxlength;
+    
+    /**
+     * @var boolean
+     */
+    protected $required;
+    
+    /**
+     * @var string
+     */
+    protected $placeholder;
+    
+    /**
      * @var string
      */
     protected $output;
+    
+    /**
+     * @var array
+     */
+    protected $arrExtra;
     
     /**
      * Constructor
@@ -61,6 +97,23 @@
       
       if (strlen(trim($this->label)))
         $this->output .= "<label for=\"{$this->id}\">{$this->label}</label>";
+      
+      $this->arrExtra = ['id' => $this->id, 'class' => $this->class];
+      
+      if ($this->disabled)
+        $this->arrExtra = array_merge(['disabled'], $this->arrExtra);
+      
+      if ($this->maxlength)
+        $this->arrExtra = array_merge(['maxlength' => $this->maxlength], $this->arrExtra);
+      
+      if ($this->readonly)
+        $this->arrExtra = array_merge(['readonly'], $this->arrExtra);
+      
+      if ($this->required)
+        $this->arrExtra = array_merge(['required'], $this->arrExtra);
+      
+      if (strlen(trim($this->placeholder)))
+        $this->arrExtra = array_merge(['placeholder' => $this->placeholder], $this->arrExtra);
     }
     
     /**
@@ -101,5 +154,53 @@
     function setName($name)
     {
       $this->name = $name;
+    }
+    
+    /**
+     * @param boolean $readonly
+     */
+    function setReadonly($readonly)
+    {
+      $this->readonly = $readonly;
+    }
+    
+    /**
+     * @param boolean $disabled
+     */
+    function setDisabled($disabled)
+    {
+      $this->disabled = $disabled;
+    }
+    
+    /**
+     * @param int $size
+     */
+    function setSize($size)
+    {
+      $this->size = $size;
+    }
+    
+    /**
+     * @param int $maxlength
+     */
+    function setMaxlength($maxlength)
+    {
+      $this->maxlength = $maxlength;
+    }
+    
+    /**
+     * @param boolean $required
+     */
+    function setRequired($required)
+    {
+      $this->required = $required;
+    }
+    
+    /**
+     * @param string $placeholder
+     */
+    function setPlaceholder($placeholder)
+    {
+      $this->placeholder = $placeholder;
     }
   }
