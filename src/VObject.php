@@ -23,7 +23,7 @@
      * Object class
      * @var string
      */
-    protected $class = "";
+    protected $class = "form-control";
     
     /**
      * Object Label
@@ -68,6 +68,16 @@
     protected $placeholder;
     
     /**
+     * @var boolean
+     */
+    protected $useDiv = true;
+
+    /**
+     * @var string
+     */
+    protected $divName = "form-group";
+
+    /**
      * @var string
      */
     protected $output;
@@ -91,9 +101,13 @@
       $this->output = "";
     }
     
+    /**
+     * Make object html
+     */
     public function make()
     {
-      $this->output .= "<div class=\"form-group\">";
+      if ($this->useDiv)
+        $this->output .= "<div class=\"{$this->divName}\">";
       
       if (strlen(trim($this->label)))
         $this->output .= "<label for=\"{$this->id}\">{$this->label}</label>";
@@ -151,7 +165,7 @@
     /**
      * @param string $name
      */
-    function setName($name)
+    public function setName($name)
     {
       $this->name = $name;
     }
@@ -159,7 +173,7 @@
     /**
      * @param boolean $readonly
      */
-    function setReadonly($readonly)
+    public function setReadonly($readonly)
     {
       $this->readonly = $readonly;
     }
@@ -167,7 +181,7 @@
     /**
      * @param boolean $disabled
      */
-    function setDisabled($disabled)
+    public function setDisabled($disabled)
     {
       $this->disabled = $disabled;
     }
@@ -175,7 +189,7 @@
     /**
      * @param int $size
      */
-    function setSize($size)
+    public function setSize($size)
     {
       $this->size = $size;
     }
@@ -183,7 +197,7 @@
     /**
      * @param int $maxlength
      */
-    function setMaxlength($maxlength)
+    public function setMaxlength($maxlength)
     {
       $this->maxlength = $maxlength;
     }
@@ -191,7 +205,7 @@
     /**
      * @param boolean $required
      */
-    function setRequired($required)
+    public function setRequired($required)
     {
       $this->required = $required;
     }
@@ -199,8 +213,24 @@
     /**
      * @param string $placeholder
      */
-    function setPlaceholder($placeholder)
+    public function setPlaceholder($placeholder)
     {
       $this->placeholder = $placeholder;
+    }
+    
+    /**
+     * @param boolean $useDiv
+     */
+    function setUseDiv($useDiv)
+    {
+      $this->useDiv = $useDiv;
+    }
+    
+    /**
+     * @param string $divName
+     */
+    function setDivName($divName)
+    {
+      $this->divName = $divName;
     }
   }
