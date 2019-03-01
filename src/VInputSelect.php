@@ -65,9 +65,19 @@
     /**
      * @param boolean $opcional
      */
-    function setOpcional($opcional = true)
+    public function setOpcional($opcional = true)
     {
       if ($opcional)
         $this->options = array_merge(["" => ""], $this->options);
+    }
+    
+    /**
+     * Add Option to Select field
+     * @param mixed $value
+     * @param mixed $description
+     */
+    public function addOption($value, $description)
+    {
+      $this->options[$value] = $description;
     }
   }
