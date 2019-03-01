@@ -1,5 +1,5 @@
 <?php
-  namespace VMaker\html;
+  namespace VMaker;
   
   /**
    * @author Veplex Sistemas de Informação
