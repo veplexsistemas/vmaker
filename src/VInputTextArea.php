@@ -39,7 +39,7 @@
      * @param int $cols
      * @param int $rows
      */
-    public function setSize($cols, $rows)
+    public function setAreaSize($cols, $rows)
     {
       $this->arrExtra["cols"] = $cols;
       $this->arrExtra["rows"] = $rows;
