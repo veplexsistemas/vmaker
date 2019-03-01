@@ -1,7 +1,7 @@
 <?php
-  namespace vmaker\html;
+  namespace VMaker\html;
   
-  use vmaker\html\VObject;
+  use VMaker\html\VObject;
   
   use Collective\Html\FormFacade as Form;
   
@@ -9,7 +9,7 @@
   {
     protected $placeholder;
     
-    public function __construct($id, $defaultValue)
+    public function __construct($id, $defaultValue = null)
     {
       parent::__construct($id, $defaultValue);
     }

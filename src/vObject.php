@@ -1,5 +1,5 @@
 <?php
-  namespace vmaker\html;
+  namespace VMaker\html;
   
   /**
    * @author Veplex Sistemas de Informação
@@ -46,7 +46,7 @@
      * @param string $id
      * @param mixed $defaultValue
      */
-    public function __construct($id, $defaultValue)
+    public function __construct($id, $defaultValue = null)
     {
       $this->setId($id);
       $this->setDefaultValue($defaultValue);

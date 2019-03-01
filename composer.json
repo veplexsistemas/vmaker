@@ -15,7 +15,7 @@
 
     "autoload": {
         "psr-4": {
-            "vmaker\\Html\\": "src/"
+            "VMaker\\Html\\": "src/"
         }
     },
 
