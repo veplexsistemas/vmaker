@@ -1,7 +1,7 @@
 <?php
-  namespace vMaker\html;
+  namespace vmaker\html;
   
-  use vMaker\html\vObject;
+  use vmaker\html\vObject;
   
   use Collective\Html\FormFacade as Form;
   
