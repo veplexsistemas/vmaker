@@ -33,4 +33,15 @@
       
       echo $this->output;
     }
+    
+    /**
+     * Set TextArea size
+     * @param int $cols
+     * @param int $rows
+     */
+    public function setSize($cols, $rows)
+    {
+      $this->arrExtra["cols"] = $cols;
+      $this->arrExtra["rows"] = $rows;
+    }
   }
