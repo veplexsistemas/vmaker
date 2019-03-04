@@ -52,8 +52,14 @@
     {
       parent::make();
       
+      $dsExtra = $this->formatOptions($this->arrExtra);
+      
+      $this->output = "<table" . (strlen($dsExtra) ? " {$dsExtra}" : "") . ">{$this->output}";
+      
       if ($this->idOpenedRow)
         $this->output .= "</tr>";
+      
+      $this->output .= "</table>";
       
       return $this->output;
     }
