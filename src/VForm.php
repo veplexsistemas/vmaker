@@ -8,7 +8,7 @@
   /**
    * Html Form
    */
-  class vForm extends vPrimitiveObject
+  class VForm extends vPrimitiveObject
   {
     /**
      * @var string
