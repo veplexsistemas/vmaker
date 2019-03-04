@@ -3,6 +3,8 @@
   
   use VMaker\vPrimitiveObject;
   
+  use Collective\Html\FormFacade as Form;
+  
   /**
    * Html Form
    */
@@ -35,6 +37,7 @@
     
     /**
      * Makes the Html Form
+     * @return string Html content
      */
     public function make()
     {
