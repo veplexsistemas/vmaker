@@ -22,7 +22,8 @@
     }
     
     /**
-     * Make object html
+     * Makes the Html Object
+     * @return string
      */
     public function make()
     {
@@ -32,6 +33,6 @@
       if ($this->useDiv)
         $this->output .= "</div>";
       
-      echo $this->output;
+      return $this->output;
     }
   }
