@@ -19,6 +19,17 @@
             "VMaker\\": "src/"
         }
     },
+    
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Wcadena\\StringBladeCompiler\\StringBladeCompilerServiceProvider::class"
+            ],
+            "aliases": {
+                "StringView": "Wcadena\\StringBladeCompiler\\Facades\\StringView::class"
+            }
+        }
+    },
 
     "minimum-stability": "dev",
     "prefer-stable": true
