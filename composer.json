@@ -10,7 +10,8 @@
     ],
     "require": {
         "php": ">=7.0.0",
-	"laravelcollective/html": "^5.2.0"
+	"laravelcollective/html": "^5.2.0",
+        "wcadena/laravel-string-blade-compiler": "^1.3"
     },
 
     "autoload": {
