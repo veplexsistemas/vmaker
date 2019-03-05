@@ -80,7 +80,7 @@
      */
     public function addObject($object)
     {
-      if ($object instanceof VForm || $object instanceof VTable || $object instanceof VObject)
+      if ($object instanceof vPrimitiveObject || $object instanceof VObject)
         $this->output .= $object->make();
     }
     

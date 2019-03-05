@@ -21,30 +21,6 @@
     protected $htmlInput = "";
     
     /**
-     * @param array $arrOptions
-     * @return string
-     */
-    protected function formatOptions($arrOptions)
-    {
-      $dsExtra = "";
-      
-      if (is_array($arrOptions) && sizeof($arrOptions))
-      {  
-        foreach ($arrOptions as $key => $dsExtraContent)
-        {
-          if (!is_numeric($key))
-            $dsExtra .= "{$key}=\"{$dsExtraContent}\" ";
-          else
-            $dsExtra .= "{$dsExtraContent} ";
-        }
-        
-        $dsExtra = trim($dsExtra);
-      }
-      
-      return $dsExtra;
-    }
-    
-    /**
      * Makes the Html Form
      * @return string Html content
      */
