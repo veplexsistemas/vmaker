@@ -45,8 +45,11 @@
      */
     public function setLayout($layout)
     {
-      $this->layout = $layout;
-      $this->output .= "@extends('{$this->layout}')";
+      if (strlen(trim($layout)))
+      {
+        $this->layout = $layout;
+        $this->output .= "@extends('{$this->layout}')";
+      }
     }
     
     /**
