@@ -11,6 +11,11 @@
     protected $layout;
     
     /**
+     * @var boolean
+     */
+    protected $idOpenedSection = false;
+    
+    /**
      * @var string
      */
     protected $output;
@@ -19,7 +24,7 @@
      * Construct
      * @param string $layout
      */
-    public function __construct($layout = null)
+    public function __construct($layout)
     {
       $this->setLayout($layout);
     }
@@ -29,7 +34,15 @@
      */
     public function openSection($section)
     {
-      $this->output .= "@section('$section')";
+      if (strlen(trim($section)))
+      {
+        if ($this->idOpenedSection)
+          $this->output .= $this->closeSection();
+        
+        $this->output .= "@section('$section')";
+        
+        $this->idOpenedSection = true;
+      }
     }
     
     /**
@@ -72,11 +85,23 @@
     }
     
     /**
+     * @param string $view
+     */
+    public function includeView($view)
+    {
+      if (strlen(trim($view)))
+        $this->output .= "@include('{$view}')";
+    }
+    
+    /**
      * Makes Html
      * @return string
      */
     public function make()
     {
+      if ($this->idOpenedSection)
+        $this->output .= $this->closeSection();
+      
       return StringView::make($this->output)->render();
     }
   }
