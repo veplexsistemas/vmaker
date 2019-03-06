@@ -155,7 +155,7 @@ STR;
                 \$id = '$id';
           @endphp
           
-          <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+          <div>
             <div style="text-align: center;">
               <select multiple {$dsExtra}>
                 @forelse (\$arrData as \$obj)
@@ -173,7 +173,7 @@ STR;
             </div>
           </div>
           
-          <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+          <div>
             <div style="text-align: center;">
               <select multiple id="{{ \$id }}_destination" name="f_{{ \$id }}_destination[]" {$dsExtraDestination}>
               </select>
