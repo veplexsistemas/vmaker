@@ -23,7 +23,8 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Wcadena\\StringBladeCompiler\\StringBladeCompilerServiceProvider"
+                "Wcadena\\StringBladeCompiler\\StringBladeCompilerServiceProvider",
+                "VMaker\\VMakerServiceProvider"
             ],
             "aliases": {
                 "StringView": "Wcadena\\StringBladeCompiler\\Facades\\StringView"
