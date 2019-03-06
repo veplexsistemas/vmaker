@@ -55,7 +55,8 @@
      */
     public function addOption($value, $description)
     {
-      $this->options[$value] = $description;
+      $this->options[]["value"]       = $value;
+      $this->options[]["description"] = $description;
     }
     
     /**
@@ -69,7 +70,7 @@
       Form::macro('duallist', function($arrExtra, $arrData)
       {
         $dsExtra = $dsComponent = "";
-        
+         
         if (is_array($arrExtra) && sizeof($arrExtra))
         {  
           foreach ($arrExtra as $key => $dsExtraContent)
@@ -82,6 +83,16 @@
           
           $dsExtra = trim($dsExtra);
         }
+        
+        $dsComponent .= <<< STR
+          <style>
+            .duallist-actions-vmaker {
+              text-align: center;
+              padding-bottom: 3px;    
+              background-image: none;    
+          }
+          </style>
+STR;
         
         $dsComponent .= <<<STR
           <script type="text/javascript">
@@ -130,31 +141,37 @@
           </script>      
 STR;
         
-        $id = $arrExtra["id"];
+        $id = $arrExtra["id"]; 
+        $dsData = print_r(json_encode($arrData), true);
         
         $dsComponent .= <<< STR
+          @php
+                \$arrData = json_decode('$dsData');
+                \$id = '$id';
+          @endphp
+                
           <div class="row duallist-veplex">
             <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">            
               <div class="duallist-select-veplex">
                 <select multiple {$dsExtra}>
-                  @forelse ($arrData as $obj)
-                    <option value={{ $obj->value }}>{{ $obj->description }}</option>
+                  @forelse (\$arrData as \$obj)
+                    <option value={{ \$obj->value }}>{{ \$obj->description }}</option>
                   @empty      
                   @endforelse
                 </select>
             </div>
                 
-            <div class="duallist-acoes-veplex">
-                <input type="button" class="btn-veplex" id="{{ $id }}_btn_allleft"  value="<<" onclick="removeAll('{{ $id }}')"> 
-                <input type="button" class="btn-veplex" id="{{ $id }}_btn_left"     value="<"  onclick="remove('{{ $id }}')">
-                <input type="button" class="btn-veplex" id="{{ $id }}_btn_right"    value=">"  onclick="addOption('{{ $id }}')">            
-                <input type="button" class="btn-veplex" id="{{ $id }}_btn_allright" value=">>" onclick="addAll('{{ $id }}')">    
+            <div class="duallist-actions-vmaker">
+                <input type="button" class="btn" id="{{ \$id }}_btn_allleft"  value="<<" onclick="removeAll('{{ \$id }}')"> 
+                <input type="button" class="btn" id="{{ \$id }}_btn_left"     value="<"  onclick="remove('{{ \$id }}')">
+                <input type="button" class="btn" id="{{ \$id }}_btn_right"    value=">"  onclick="addOption('{{ \$id }}')">            
+                <input type="button" class="btn" id="{{ \$id }}_btn_allright" value=">>" onclick="addAll('{{ \$id }}')">    
             </div>
           </div>
           
           <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
             <div class="duallist-select-veplex">
-              <select multiple class="form-control" id="{{ $id }}_destination" name="f_{{ $id }}_destination[]">
+              <select multiple class="form-control" id="{{ \$id }}_destination" name="f_{{ \$id }}_destination[]">
               </select>
             </div>
           </div>
