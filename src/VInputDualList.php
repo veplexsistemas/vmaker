@@ -71,41 +71,33 @@
       
       Form::macro('duallist', function($arrExtra, $arrData)
       {
-        $dsExtra = $dsComponent = "";
+        $dsComponent = "";
          
-        if (is_array($arrExtra) && sizeof($arrExtra))
-        {  
-          foreach ($arrExtra as $key => $dsExtraContent)
-          {
-            if (!is_numeric($key))
-              $dsExtra .= "{$key}=\"{$dsExtraContent}\" ";
-            else
-              $dsExtra .= "{$dsExtraContent} ";
-          }
+        function formatOptions($arrExtra, $arrIgnore = [])
+        {
+          $dsExtra = "";
           
-          $dsExtra = trim($dsExtra);
+          if (is_array($arrExtra) && sizeof($arrExtra))
+          {
+            foreach ($arrExtra as $key => $dsExtraContent)
+            {
+              if (in_array($key, $arrIgnore))
+                continue;
+              
+              if (!is_numeric($key))
+                $dsExtra .= "{$key}=\"{$dsExtraContent}\" ";
+              else
+                $dsExtra .= "{$dsExtraContent} ";
+            }
+
+            $dsExtra = trim($dsExtra);
+          }  
+          
+          return $dsExtra;
         }
         
-        $dsComponent .= <<< STR
-          <style>
-            .duallist-actions-vmaker {
-              text-align: center;
-              padding-bottom: 3px;    
-              background-image: none;    
-          }
-                
-            .duallist-veplex {    
-              padding: 5px;
-              margin: 5px 0px 5px 0px!important;
-              border-bottom: 1px solid #d3e0e9;
-              border-radius: 5px;
-            }
-                
-            .duallist-select-veplex {
-              text-align: center;
-            }
-          </style>
-STR;
+        $dsExtra            = formatOptions($arrExtra);
+        $dsExtraDestination = formatOptions($arrExtra, ["id", "name"]);
         
         $dsComponent .= <<<STR
           <script type="text/javascript">
@@ -154,7 +146,7 @@ STR;
           </script>      
 STR;
         
-        $id = $arrExtra["id"]; 
+        $id     = $arrExtra["id"]; 
         $dsData = print_r(json_encode($arrData), true);
         
         $dsComponent .= <<< STR
@@ -175,16 +167,16 @@ STR;
             </div>
                 
             <div class="duallist-actions-vmaker">
-                <input type="button" class="btn" id="{{ \$id }}_btn_allleft"  value="<<" onclick="removeAll('{{ \$id }}')"> 
-                <input type="button" class="btn" id="{{ \$id }}_btn_left"     value="<"  onclick="remove('{{ \$id }}')">
-                <input type="button" class="btn" id="{{ \$id }}_btn_right"    value=">"  onclick="addOption('{{ \$id }}')">            
-                <input type="button" class="btn" id="{{ \$id }}_btn_allright" value=">>" onclick="addAll('{{ \$id }}')">    
+                <input type="button" class="btn-veplex" id="{{ \$id }}_btn_allleft"  value="<<" onclick="removeAll('{{ \$id }}')"> 
+                <input type="button" class="btn-veplex" id="{{ \$id }}_btn_left"     value="<"  onclick="remove('{{ \$id }}')">
+                <input type="button" class="btn-veplex" id="{{ \$id }}_btn_right"    value=">"  onclick="addOption('{{ \$id }}')">            
+                <input type="button" class="btn-veplex" id="{{ \$id }}_btn_allright" value=">>" onclick="addAll('{{ \$id }}')">    
             </div>
           </div>
           
           <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
             <div class="duallist-select-veplex">
-              <select multiple class="form-control" id="{{ \$id }}_destination" name="f_{{ \$id }}_destination[]">
+              <select multiple id="{{ \$id }}_destination" name="f_{{ \$id }}_destination[]" {$dsExtraDestination}>
               </select>
             </div>
           </div>

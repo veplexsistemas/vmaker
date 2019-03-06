@@ -123,6 +123,9 @@
       if ($this->disabled)
         $this->arrExtra = array_merge(['disabled'], $this->arrExtra);
       
+      if ($this->size)
+        $this->arrExtra = array_merge(['size' => $this->size], $this->arrExtra);
+      
       if ($this->maxlength)
         $this->arrExtra = array_merge(['maxlength' => $this->maxlength], $this->arrExtra);
       
