@@ -93,14 +93,23 @@
         $this->output .= "@include('{$view}')";
     }
 
-      /**
-       * @param string $script
-       * @param string $type
-       */
-    public function addScript($script, $type = "javascript")
+    /**
+     * @param string $script
+     * @param string $type
+     */
+    public function addScript($script, $type = "text/javascript")
     {
       if (strlen(trim($script)))
         $this->output .= "<script type='{$type}'>{$script}</script>";
+    }
+    
+    /**
+     * @param string $style
+     */
+    public function addStyle($style)
+    {
+      if (strlen(trim($style)))
+        $this->output .= "<style>{$style}</style>";
     }
     
     /**
