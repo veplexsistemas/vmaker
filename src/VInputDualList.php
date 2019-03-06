@@ -55,8 +55,10 @@
      */
     public function addOption($value, $description)
     {
-      $this->options[]["value"]       = $value;
-      $this->options[]["description"] = $description;
+      $id = sizeof($this->options);
+      
+      $this->options[$id]["value"]       = $value;
+      $this->options[$id]["description"] = $description;
     }
     
     /**
@@ -91,6 +93,17 @@
               padding-bottom: 3px;    
               background-image: none;    
           }
+                
+            .duallist-veplex {    
+              padding: 5px;
+              margin: 5px 0px 5px 0px!important;
+              border-bottom: 1px solid #d3e0e9;
+              border-radius: 5px;
+            }
+                
+            .duallist-select-veplex {
+              text-align: center;
+            }
           </style>
 STR;
         
