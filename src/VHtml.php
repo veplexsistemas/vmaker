@@ -92,6 +92,16 @@
       if (strlen(trim($view)))
         $this->output .= "@include('{$view}')";
     }
+
+      /**
+       * @param string $script
+       * @param string $type
+       */
+    public function addScript($script, $type = "javascript")
+    {
+      if (strlen(trim($script)))
+        $this->output .= "<script type='{$type}'>{$script}</script>";
+    }
     
     /**
      * Makes Html
