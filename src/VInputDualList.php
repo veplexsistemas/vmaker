@@ -154,39 +154,40 @@ STR;
                 \$arrData = json_decode('$dsData');
                 \$id = '$id';
           @endphp
-                
-          <div class="row duallist-veplex">
-            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-              <div class="duallist-select-veplex">
-                <select multiple {$dsExtra}>
-                  @forelse (\$arrData as \$obj)
-                    <option value={{ \$obj->value }}>{{ \$obj->description }}</option>
-                  @empty      
-                  @endforelse
-                </select>
-              </div>
-                
-              <div class="duallist-actions-vmaker">
-                <input type="button" class="btn-veplex" id="{{ \$id }}_btn_allleft"  value="<<" onclick="removeAll('{{ \$id }}')"> 
-                <input type="button" class="btn-veplex" id="{{ \$id }}_btn_left"     value="<"  onclick="remove('{{ \$id }}')">
-                <input type="button" class="btn-veplex" id="{{ \$id }}_btn_right"    value=">"  onclick="addOption('{{ \$id }}')">            
-                <input type="button" class="btn-veplex" id="{{ \$id }}_btn_allright" value=">>" onclick="addAll('{{ \$id }}')">    
-              </div>
-            </div>
           
-            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-              <div class="duallist-select-veplex">
-                <select multiple id="{{ \$id }}_destination" name="f_{{ \$id }}_destination[]" {$dsExtraDestination}>
-                </select>
-              </div>
+          <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            <div style="text-align: center;">
+              <select multiple {$dsExtra}>
+                @forelse (\$arrData as \$obj)
+                  <option value={{ \$obj->value }}>{{ \$obj->description }}</option>
+                @empty      
+                @endforelse
+              </select>
             </div>
-          </div>          
+            
+            <div style="text-align: center;padding-bottom: 3px;background-image: none;">
+              <input type="button" class="btn" id="{{ \$id }}_btn_allleft"  value="<<" onclick="removeAll('{{ \$id }}')"> 
+              <input type="button" class="btn" id="{{ \$id }}_btn_left"     value="<"  onclick="remove('{{ \$id }}')">
+              <input type="button" class="btn" id="{{ \$id }}_btn_right"    value=">"  onclick="addOption('{{ \$id }}')">            
+              <input type="button" class="btn" id="{{ \$id }}_btn_allright" value=">>" onclick="addAll('{{ \$id }}')">    
+            </div>
+          </div>
+          
+          <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            <div style="text-align: center;">
+              <select multiple id="{{ \$id }}_destination" name="f_{{ \$id }}_destination[]" {$dsExtraDestination}>
+              </select>
+            </div>
+          </div>
 STR;
-        
+              
         return $dsComponent;
       });
       
       $this->output .= Form::duallist($this->arrExtra, $this->options);
+      
+      if ($this->useDiv)
+        $this->output .= "</div>";
       
       return $this->output;
     }
