@@ -41,7 +41,10 @@
       
       if ($this->useDiv)
         $this->output .= "</div>";
+
+      $this->allowNegative = ($this->allowNegative ?: "0");
       
+      $this->output .= "<script src=\"{{ asset('vendor/vmaker/js/jquery.maskMoney.min.js') }}\"></script>";
       $this->output .= "<script>$('#{$this->id}').maskMoney({precision: {$this->precision}, allowNegative: {$this->allowNegative}, thousands: '.', decimal: ','}); </script>";
       
       return $this->output;
