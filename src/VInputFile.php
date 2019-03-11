@@ -39,7 +39,10 @@
       parent::make();
       
       if ($this->multiple)
+      {
         $this->arrExtra = array_merge(['multiple'], $this->arrExtra);
+        $this->name = "f_{$this->id}[]";
+      }
       
       if ($this->accept)
         $this->arrExtra = array_merge(['accept' => $this->accept], $this->arrExtra);
