@@ -31,6 +31,11 @@
     protected $autocomplete;
     
     /**
+     * @var string 
+     */
+    protected $enctype;
+    
+    /**
      * @var string
      */
     protected $htmlInput = "";
@@ -55,6 +60,9 @@
       if (is_bool($this->autocomplete))
         $this->arrExtra["autocomplete"] = ($this->autocomplete === true ? "on" : "off");
       
+      if (strlen(trim($this->enctype)))
+        $this->arrExtra["enctype"] = $this->enctype;
+      
       //Output
       $this->output = "";
       $this->output .= Form::open($this->arrExtra);
@@ -64,10 +72,16 @@
       return $this->output;
     }
     
+    /**
+     * @param VObject $object
+     */
     public function addInputField(&$object)
     {
       if ($object instanceof VObject)
         $this->htmlInput .= $object->make();
+      
+      if ($object instanceof VInputFile)
+        $this->enctype = "multipart/form-data";
     }
     
     /**
@@ -100,5 +114,13 @@
     public function setAutocomplete($autocomplete)
     {
       $this->autocomplete = $autocomplete;
+    }
+    
+    /**
+     * @param string $enctype
+     */
+    public function setEnctype($enctype)
+    {
+      $this->enctype = $enctype;
     }
   }
