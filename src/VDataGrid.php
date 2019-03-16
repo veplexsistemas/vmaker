@@ -45,7 +45,7 @@ class VDataGrid extends vPrimitiveObject
   
   public function __construct()
   {
-    $this->class = "table table-hover table-responsive";
+    $this->class = "table table-hover table-responsive table-sm";
   }
   
   /**
@@ -57,9 +57,11 @@ class VDataGrid extends vPrimitiveObject
     parent::make(); 
     
     $this->table = new VTable();
-    $this->table->setStyle("width: 100%");
     $this->table->setClass($this->class);
-      
+    $this->table->setStyle($this->style);
+    $this->table->setId($this->id);
+    $this->table->setName($this->name);
+    
     if (is_array($this->fields) && sizeof($this->fields))
     {
       $this->table->openTableHead();

@@ -127,7 +127,7 @@
      * Table foot ("tfoot" table)
      * @param array $options
      */
-    public function openTableFoot($options)
+    public function openTableFoot($options = [])
     {
       $this->closeRow();
       $dsExtra = $this->formatOptions($options);
