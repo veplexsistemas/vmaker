@@ -3,6 +3,7 @@
 namespace VMaker;
 
 use VMaker\VTable;
+use \Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class VDataGrid extends vPrimitiveObject
 {
@@ -30,14 +31,27 @@ class VDataGrid extends vPrimitiveObject
    * @var boolean 
    */
   protected $showPagination = true;
+
+  /**
+   * Navigation Position (top or bottom)
+   * @var string
+   */
+  protected $navigationPosition = "bottom";
   
-  protected $extraFields;
+  /**
+   * @var array
+   */
+  protected $extraFields = [];
   
   public function __construct()
   {
     $this->class = "table table-hover table-responsive";
   }
   
+  /**
+   * Makes data grid
+   * @return string
+   */
   public function make()
   {
     parent::make(); 
@@ -95,7 +109,7 @@ class VDataGrid extends vPrimitiveObject
                     $url .= "/{$obj->$urlField}";
                 }
                 
-                $arrExtra["content"] = "<a href=\"{$url}\">{$arrExtra["content"]}</a>";
+                $arrExtra["content"] = "<a href=\"{$url}\" class=\"{$arrExtra["urlClass"]}\">{$arrExtra["content"]}</a>";
               }
               
               $this->table->openCell($arrExtra["content"]);
@@ -107,11 +121,18 @@ class VDataGrid extends vPrimitiveObject
       } //if (is_object($this->data))
     } //if (is_array($this->fields) && sizeof($this->fields))
     
-    
     $this->output = $this->table->make();
     
-    if ($this->showPagination)
-      $this->output .= $this->data->links();
+    if ($this->data instanceof LengthAwarePaginator && $this->showPagination)
+    {
+      $dsPagination = $this->data->links();
+      
+      switch ($this->navigationPosition)
+      {
+        case "top":    $this->output = $dsPagination . $this->output; break;
+        case "bottom": $this->output .= $dsPagination;                break;
+      }
+    }
     
     return $this->output;
   }
@@ -153,7 +174,12 @@ class VDataGrid extends vPrimitiveObject
    */
   public function addExtraField($label, $content, $url = "", $urlData = [], $urlClass = "")
   {
-    $this->extraFields[] = ["label" => $label, "content" => $content, 'url' => $url, 'urlData' => $urlData];
+    $this->extraFields[] = [
+      "label"    => $label, 
+      "content"  => $content, 
+      "url"      => $url, 
+      "urlData"  => $urlData,
+      "urlClass" => $urlClass];
   }
   
   /**
@@ -164,5 +190,12 @@ class VDataGrid extends vPrimitiveObject
     $this->showPagination = $showPagination;
   }
   
-  
+  /**
+   * Navigation position ("top" or "bottom")
+   * @param string $navigationPosition
+   */
+  public function setNavigationPosition($navigationPosition)
+  {
+    $this->navigationPosition = $navigationPosition;
+  }
 }
