@@ -19,14 +19,35 @@
     {
       parent::__construct($id, $defaultValue);
     }
-    
-    /**
-     * Makes the Html Object
-     * @return string
-     */
+  
     public function make()
     {
       parent::make();
+      
+      Form::macro('month', function($name, $default, $arrExtra)
+      {
+        if (is_array($arrExtra) && sizeof($arrExtra))
+        {
+          $dsExtra = "";
+          
+          foreach ($arrExtra as $key => $dsExtraContent)
+          {
+            if (!is_numeric($key))
+              $dsExtra .= "{$key}=\"{$dsExtraContent}\" ";
+            else
+              $dsExtra .= "{$dsExtraContent} ";
+          }
+          
+          $dsExtra = trim($dsExtra);
+        }
+        
+        $dsComponent = "<input type=\"month\" name=\"$name\"";
+        $dsComponent .= ($dsExtra ? " {$dsExtra}" : "");
+        $dsComponent .= ($default ? " value=\"{$default}\"" : "");
+        
+        return $dsComponent;
+      });
+      
       $this->output .= Form::month($this->name, $this->defaultValue, $this->arrExtra);
       
       if ($this->useDiv)
