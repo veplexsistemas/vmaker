@@ -86,6 +86,16 @@
     /**
      * @var string
      */
+    protected $extraLabel;
+    
+    /**
+     * @var string
+     */
+    protected $extraLabelClass = "extraLabel";
+    
+    /**
+     * @var string
+     */
     protected $output;
     
     /**
@@ -117,7 +127,10 @@
       
       if (strlen(trim($this->label)))
         $this->output .= "<label for=\"{$this->id}\">{$this->label}</label>";
-      
+        
+     if (strlen(trim($this->extraLabel)))
+        $this->output .= "<div class=\"{$this->extraLabelClass}\">$this->extraLabel</div>";
+    
       $this->arrExtra = array_merge(['id' => $this->id, 'class' => $this->class], $this->arrExtra);
       
       if ($this->disabled)
@@ -233,7 +246,7 @@
     /**
      * @param boolean $useDiv
      */
-    function setUseDiv($useDiv)
+    public function setUseDiv($useDiv)
     {
       $this->useDiv = $useDiv;
     }
@@ -241,7 +254,7 @@
     /**
      * @param string $divName
      */
-    function setDivName($divName)
+    public function setDivName($divName)
     {
       $this->divName = $divName;
     }
@@ -249,8 +262,21 @@
     /**
      * @param string $style
      */
-    function setStyle($style)
+    public function setStyle($style)
     {
       $this->style = $style;
+    }
+    
+    /**
+     * @param string $extraLabel (Html Content)
+     */
+    public function setExtraLabel($extraLabel)
+    {
+      $this->extraLabel = $extraLabel;
+    }
+    
+    public function setExtraLabelClass($extraLabelClass)
+    {
+      $this->extraLabelClass = $extraLabelClass;
     }
   }
