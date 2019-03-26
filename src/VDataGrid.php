@@ -31,17 +31,16 @@ class VDataGrid extends vPrimitiveObject
    * @var boolean 
    */
   protected $showPagination = true;
-
-  /**
-   * Navigation Position (top or bottom)
-   * @var string
-   */
-  protected $navigationPosition = "bottom";
   
   /**
    * @var array
    */
   protected $extraFields = [];
+  
+  /**
+   * @var string
+   */
+  protected $rowClass = "row";
   
   public function __construct()
   {
@@ -60,22 +59,44 @@ class VDataGrid extends vPrimitiveObject
     $this->table->setClass($this->class);
     $this->table->setStyle($this->style);
     $this->table->setId($this->id);
-    $this->table->setName($this->name);
     
     if (is_array($this->fields) && sizeof($this->fields))
     {
       $this->table->openTableHead();
       
+      //Pagination
+      if ($this->data instanceof LengthAwarePaginator && $this->showPagination)
+      {
+        $colspan = sizeof($this->fields) + sizeof($this->extraFields);
+        
+        $this->table->openRow(["class" => $this->rowClass]);
+        $this->table->openHeader("<br/>" . $this->data->links(), ["class" => "col-12", "colspan" => $colspan]);
+      }
+      
       //Header
-      $this->table->openRow();
+      $this->table->openRow(["class" => $this->rowClass]);
       
       foreach ($this->fields as $nmField => $lbField)
-        $this->table->openHeader($lbField, ["style" => "text-align: center"]);
+      {
+        $options = ["style" => "text-align: center"];
+        
+        if (isset($this->fieldOptions[$nmField]["class"]))
+          $options = array_merge($options, ["class" => $this->fieldOptions[$nmField]["class"]]);
+        
+        $this->table->openHeader($lbField, $options);
+      }
       
       if (sizeof($this->extraFields))
       {
         foreach ($this->extraFields as $arrExtra)
-          $this->table->openHeader($arrExtra["label"], ["style" => "text-align: center"]);
+        {
+          $options = ["style" => "text-align: center"];
+          
+          if (isset($arrExtra["colClass"]))
+            $options = array_merge($options, ["class" => $arrExtra["colClass"]]);
+          
+          $this->table->openHeader($arrExtra["label"], $options);
+        }
       }
       
       $this->table->closeTableHead();
@@ -87,7 +108,7 @@ class VDataGrid extends vPrimitiveObject
         
         foreach ($this->data as $obj)
         {
-          $this->table->openRow();
+          $this->table->openRow(["class" => $this->rowClass]);
           
           //Regular Fields
           foreach ($this->fields as $nmField => $lbField)
@@ -114,7 +135,7 @@ class VDataGrid extends vPrimitiveObject
                 $arrExtra["content"] = "<a href=\"{$url}\" class=\"{$arrExtra["urlClass"]}\">{$arrExtra["content"]}</a>";
               }
               
-              $this->table->openCell($arrExtra["content"]);
+              $this->table->openCell($arrExtra["content"], ["style" => "text-align: center", "class" => $arrExtra["colClass"]]);
             }
           } //extra fields
         } //foreach ($this->data as $obj)
@@ -124,17 +145,6 @@ class VDataGrid extends vPrimitiveObject
     } //if (is_array($this->fields) && sizeof($this->fields))
     
     $this->output = $this->table->make();
-    
-    if ($this->data instanceof LengthAwarePaginator && $this->showPagination)
-    {
-      $dsPagination = $this->data->links();
-      
-      switch ($this->navigationPosition)
-      {
-        case "top":    $this->output = $dsPagination . $this->output; break;
-        case "bottom": $this->output .= $dsPagination;                break;
-      }
-    }
     
     return $this->output;
   }
@@ -167,21 +177,34 @@ class VDataGrid extends vPrimitiveObject
   }
   
   /**
+   * Set field class
+   * @param string $field
+   * @param string $class
+   */
+  public function setFieldClass($field, $class)
+  {
+    if (strlen(trim($field)) && strlen(trim($class)))
+      $this->fieldOptions[$field]["class"] = $class;
+  }
+  
+  /**
    * Add extra field to grid
    * @param string $label
    * @param string $content
    * @param string $url
    * @param array $urlData
    * @param string $urlClass
+   * @param string $colClass
    */
-  public function addExtraField($label, $content, $url = "", $urlData = [], $urlClass = "")
+  public function addExtraField($label, $content, $url = "", $urlData = [], $urlClass = "", $colClass = "col-1")
   {
     $this->extraFields[] = [
       "label"    => $label, 
       "content"  => $content, 
       "url"      => $url, 
       "urlData"  => $urlData,
-      "urlClass" => $urlClass];
+      "urlClass" => $urlClass,
+      "colClass" => $colClass];
   }
   
   /**
@@ -193,11 +216,10 @@ class VDataGrid extends vPrimitiveObject
   }
   
   /**
-   * Navigation position ("top" or "bottom")
-   * @param string $navigationPosition
+   * @param string $rowClass
    */
-  public function setNavigationPosition($navigationPosition)
+  public function setRowClass($rowClass)
   {
-    $this->navigationPosition = $navigationPosition;
+    $this->rowClass = $rowClass;
   }
 }
