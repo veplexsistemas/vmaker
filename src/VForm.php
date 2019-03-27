@@ -41,6 +41,16 @@
     protected $htmlInput = "";
     
     /**
+     * @var Illuminate\Database\Eloquent\Model
+     */
+    protected $modelBinding;
+    
+    /**
+     * @var mixed
+     */
+    protected $modelBindingId;
+    
+    /**
      * Makes the Html Form
      * @return string Html content
      */
@@ -65,7 +75,15 @@
       
       //Output
       $this->output = "";
-      $this->output .= Form::open($this->arrExtra);
+      
+      if ($this->model)
+      {
+        $route = ["route" => [$this->action, $this->modelBindingId]];
+        $this->output .= Form::model($this->modelBinding, array_merge($route, $this->arrExtra));
+      }
+      else
+        $this->output .= Form::open($this->arrExtra);
+      
       $this->output .= $this->htmlInput;
       $this->output .= Form::close();
       
@@ -122,5 +140,11 @@
     public function setEnctype($enctype)
     {
       $this->enctype = $enctype;
+    }
+    
+    public function setModelBinding(Illuminate\Database\Eloquent\Model $model, $modelId = null)
+    {
+      $this->modelBinding   = $model;
+      $this->modelBindingId = $modelId;
     }
   }
