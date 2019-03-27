@@ -76,7 +76,7 @@
       //Output
       $this->output = "";
       
-      if ($this->model)
+      if ($this->modelBinding)
       {
         $route = ["route" => [$this->action, $this->modelBindingId]];
         $this->output .= Form::model($this->modelBinding, array_merge($route, $this->arrExtra));
