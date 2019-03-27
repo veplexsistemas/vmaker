@@ -28,6 +28,11 @@ class VDataGrid extends vPrimitiveObject
   protected $fieldOptions = [];
   
   /**
+   * @var array
+   */
+  protected $fieldCallback = [];
+  
+  /**
    * @var boolean 
    */
   protected $showPagination = true;
@@ -114,7 +119,19 @@ class VDataGrid extends vPrimitiveObject
           foreach ($this->fields as $nmField => $lbField)
           {
             $options = (isset($this->fieldOptions[$nmField]) ? $this->fieldOptions[$nmField] : []);
-            $this->table->openCell($obj->$nmField, $options);
+            
+            $val = "";
+            if (isset($this->fieldCallback[$nmField]))
+            {
+              $callback   = $this->fieldCallback[$nmField]["callback"];
+              $parameters = array_merge([$obj->$nmField], $this->fieldCallback[$nmField]["parameters"]);
+              
+              $val = call_user_func_array($callback, $parameters);
+            }
+            else
+              $val = $obj->$nmField;
+            
+            $this->table->openCell($val, $options);
           }
           
           //Extra Fields
@@ -221,5 +238,25 @@ class VDataGrid extends vPrimitiveObject
   public function setRowClass($rowClass)
   {
     $this->rowClass = $rowClass;
+  }
+  
+  /**
+   * Field Callback
+   * @param string $field
+   * @param string $callback
+   * @param array $parameters
+   */
+  public function setFieldCallback($field, $callback, $parameters = [])
+  {
+    if (strlen(trim($field)) && strlen(trim($callback)))
+    {
+      if (function_exists($callback))
+      {
+        $this->fieldCallback[$field] = [
+            "callback" => $callback,
+            "parameters" => $parameters
+        ];
+      }
+    }
   }
 }
