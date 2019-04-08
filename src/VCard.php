@@ -51,6 +51,7 @@
     public function make()
     {
       parent::make();
+      $this->output = "<div {$this->formatOptions($this->arrExtra)}>" . $this->output . "</div>";
       return $this->output;
     }
     
