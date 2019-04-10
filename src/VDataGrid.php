@@ -142,14 +142,18 @@ class VDataGrid extends vPrimitiveObject
               if ($arrExtra["url"])
               {
                 $url = $arrExtra["url"];
+                $id = $arrExtra["urlId"];
                 
                 if (sizeof($arrExtra["urlData"]))
                 {
                   foreach ($arrExtra["urlData"] as $urlField)
+                  {
                     $url .= "/{$obj->$urlField}";
+                    $id .= "_{$obj->$urlField}";
+                  }
                 }
                 
-                $arrExtra["content"] = "<a href=\"{$url}\" class=\"{$arrExtra["urlClass"]}\">{$arrExtra["content"]}</a>";
+                $arrExtra["content"] = "<a href=\"{$url}\" class=\"{$arrExtra["urlClass"]}\" id=\"{$id}\">{$arrExtra["content"]}</a>";
               }
               
               $this->table->openCell($arrExtra["content"], ["style" => "text-align: center", "class" => $arrExtra["colClass"]]);
@@ -211,9 +215,10 @@ class VDataGrid extends vPrimitiveObject
    * @param string $url
    * @param array $urlData
    * @param string $urlClass
+   * @param string $urlId
    * @param string $colClass
    */
-  public function addExtraField($label, $content, $url = "", $urlData = [], $urlClass = "", $colClass = "col-1")
+  public function addExtraField($label, $content, $url = "", $urlData = [], $urlClass = "", $urlId = "", $colClass = "col-1")
   {
     $this->extraFields[] = [
       "label"    => $label, 
@@ -221,6 +226,7 @@ class VDataGrid extends vPrimitiveObject
       "url"      => $url, 
       "urlData"  => $urlData,
       "urlClass" => $urlClass,
+      "urlId"    => $urlId,
       "colClass" => $colClass];
   }
   
