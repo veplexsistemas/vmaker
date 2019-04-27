@@ -41,14 +41,14 @@
     protected $htmlInput = "";
     
     /**
-     * @var Illuminate\Database\Eloquent\Model
+     * @var object
      */
-    protected $modelBinding;
+    protected $model;
     
     /**
-     * @var mixed
+     * @var boolean
      */
-    protected $modelBindingId;
+    protected $idModel = false;
     
     /**
      * Makes the Html Form
@@ -76,13 +76,7 @@
       //Output
       $this->output = "";
       
-      if ($this->modelBinding)
-      {
-        $route = ["route" => [$this->action, $this->modelBindingId]];
-        $this->output .= Form::model($this->modelBinding, array_merge($route, $this->arrExtra));
-      }
-      else
-        $this->output .= Form::open($this->arrExtra);
+      $this->output .= Form::open($this->arrExtra);
       
       $this->output .= $this->htmlInput;
       $this->output .= Form::close();
@@ -95,6 +89,12 @@
      */
     public function addInputField(&$object)
     {
+      if ($this->model && !$this->idModel)
+      {
+        Form::model($this->model);
+        $this->idModel = true;
+      }
+      
       if ($object instanceof VObject)
         $this->htmlInput .= $object->make();
       
@@ -142,9 +142,11 @@
       $this->enctype = $enctype;
     }
     
-    public function setModelBinding(Illuminate\Database\Eloquent\Model $model, $modelId = null)
+    /**
+     * @param object $model
+     */
+    public function setModel($model)
     {
-      $this->modelBinding   = $model;
-      $this->modelBindingId = $modelId;
+      $this->model = $model;
     }
   }
