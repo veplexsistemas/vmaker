@@ -51,6 +51,11 @@
     protected $idModel = false;
     
     /**
+     * @var \Illuminate\Support\ViewErrorBag
+     */
+    protected $errors;
+    
+    /**
      * Makes the Html Form
      * @return string Html content
      */
@@ -96,7 +101,12 @@
       }
       
       if ($object instanceof VObject)
+      {
+        if (is_object($this->errors))
+          $object->setErrors($this->errors);
+        
         $this->htmlInput .= $object->make();
+      }
       
       if ($object instanceof VInputFile)
         $this->enctype = "multipart/form-data";
@@ -148,5 +158,10 @@
     public function setModel($model)
     {
       $this->model = $model;
+    }
+    
+    public function setErrors(\Illuminate\Support\ViewErrorBag $errors)
+    {
+      $this->errors = $errors;
     }
   }
