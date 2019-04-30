@@ -104,6 +104,16 @@
     protected $arrExtra = array();
     
     /**
+     * @var \Illuminate\Support\ViewErrorBag
+     */
+    protected $errors;
+    
+    /**
+     * @var string
+     */
+    protected $errorClass = "is-invalid";
+    
+    /**
      * Constructor
      * @param string $id
      * @param mixed $defaultValue
@@ -128,9 +138,18 @@
       if (strlen(trim($this->label)))
         $this->output .= "<label for=\"{$this->id}\">{$this->label}</label>";
         
-     if (strlen(trim($this->extraLabel)))
+      if (strlen(trim($this->extraLabel)))
         $this->output .= "<div class=\"{$this->extraLabelClass}\">$this->extraLabel</div>";
     
+      if (is_object($this->errors))
+      {
+        if ($this->errors->has($this->name) && strlen($this->errorClass))
+        {
+          $this->class .= " {$this->errorClass}";
+          $this->output .= "<span class=\"text-danger\">&nbsp;({$this->errors->first($this->name)})</span>";
+        }
+      }
+      
       $this->arrExtra = array_merge(['id' => $this->id, 'class' => $this->class], $this->arrExtra);
       
       if ($this->disabled)
@@ -275,8 +294,27 @@
       $this->extraLabel = $extraLabel;
     }
     
+    /**
+     * @param string $extraLabelClass
+     */
     public function setExtraLabelClass($extraLabelClass)
     {
       $this->extraLabelClass = $extraLabelClass;
+    }
+    
+    /**
+     * @param \Illuminate\Support\ViewErrorBag $errors
+     */
+    public function setErrors(\Illuminate\Support\ViewErrorBag $errors)
+    {
+      $this->errors = $errors;
+    }
+    
+    /**
+     * @param string $errorClass
+     */
+    public function setErrorClass($errorClass)
+    {
+      $this->errorClass = $errorClass;
     }
   }
