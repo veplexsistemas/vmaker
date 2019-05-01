@@ -81,6 +81,19 @@
       //Output
       $this->output = "";
       
+      if (is_object($this->errors))
+      {
+        if ($this->errors->any())
+        {
+          $this->output .= "<div class=\"alert alert-danger\"><ul>";
+          
+          foreach ($this->errors->all() as $teste)
+            $this->output .= "<li>{$teste}</li>";
+            
+          $this->output .= "</ul></div>";
+        }
+      }
+      
       $this->output .= Form::open($this->arrExtra);
       
       $this->output .= $this->htmlInput;
