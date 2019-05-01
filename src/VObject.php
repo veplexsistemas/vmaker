@@ -146,7 +146,7 @@
         if ($this->errors->has($this->name) && strlen($this->errorClass))
         {
           $this->class .= " {$this->errorClass}";
-          $this->output .= "<span class=\"text-danger\">&nbsp;({$this->errors->first($this->name)})</span>";
+          //$this->output .= "<span class=\"text-danger\">&nbsp;({$this->errors->first($this->name)})</span>";
         }
       }
       
