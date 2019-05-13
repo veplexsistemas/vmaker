@@ -73,9 +73,14 @@ class VDataGrid extends vPrimitiveObject
       if ($this->data instanceof LengthAwarePaginator && $this->showPagination)
       {
         $colspan = sizeof($this->fields) + sizeof($this->extraFields);
+
+        $dsTotal = "";
+        
+        if ($this->data->total())
+          $dsTotal .= "<br/>Listando {$this->data->firstItem()} a {$this->data->lastItem()} de {$this->data->total()}";
         
         $this->table->openRow(["class" => $this->rowClass]);
-        $this->table->openHeader("<br/>" . $this->data->links(), ["class" => "col-12", "colspan" => $colspan]);
+        $this->table->openHeader($this->data->links() . $dsTotal, ["class" => "col-12", "colspan" => $colspan]);
       }
       
       //Header
