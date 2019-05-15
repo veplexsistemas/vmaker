@@ -69,11 +69,11 @@ class VDataGrid extends vPrimitiveObject
     {
       $this->table->openTableHead();
       
+      $colspan = sizeof($this->fields) + sizeof($this->extraFields);
+      
       //Pagination
       if ($this->data instanceof LengthAwarePaginator && $this->showPagination)
       {
-        $colspan = sizeof($this->fields) + sizeof($this->extraFields);
-
         $dsTotal = "";
         
         if ($this->data->total())
@@ -116,55 +116,63 @@ class VDataGrid extends vPrimitiveObject
       {
         $this->table->openTableBody();
         
-        foreach ($this->data as $obj)
+        if ($this->data->total())
+        {
+          foreach ($this->data as $obj)
+          {
+            $this->table->openRow(["class" => $this->rowClass]);
+
+            //Regular Fields
+            foreach ($this->fields as $nmField => $lbField)
+            {
+              $options = (isset($this->fieldOptions[$nmField]) ? $this->fieldOptions[$nmField] : []);
+
+              $val = "";
+              if (isset($this->fieldCallback[$nmField]))
+              {
+                $callback   = $this->fieldCallback[$nmField]["callback"];
+                $parameters = array_merge([$obj->$nmField], $this->fieldCallback[$nmField]["parameters"]);
+
+                $val = call_user_func_array($callback, $parameters);
+              }
+              else
+                $val = $obj->$nmField;
+
+              $this->table->openCell($val, $options);
+            }
+
+            //Extra Fields
+            if (sizeof($this->extraFields))
+            {
+              foreach ($this->extraFields as $arrExtra)
+              {
+                if ($arrExtra["url"])
+                {
+                  $url = $arrExtra["url"];
+                  $id = $arrExtra["urlId"];
+
+                  if (sizeof($arrExtra["urlData"]))
+                  {
+                    foreach ($arrExtra["urlData"] as $urlField)
+                    {
+                      $url .= "/{$obj->$urlField}";
+                      $id .= "_{$obj->$urlField}";
+                    }
+                  }
+
+                  $arrExtra["content"] = "<a href=\"{$url}\" class=\"{$arrExtra["urlClass"]}\" id=\"{$id}\">{$arrExtra["content"]}</a>";
+                }
+
+                $this->table->openCell($arrExtra["content"], ["style" => "text-align: center", "class" => $arrExtra["colClass"]]);
+              }
+            } //extra fields
+          }//foreach ($this->data as $obj)
+        }
+        else
         {
           $this->table->openRow(["class" => $this->rowClass]);
-          
-          //Regular Fields
-          foreach ($this->fields as $nmField => $lbField)
-          {
-            $options = (isset($this->fieldOptions[$nmField]) ? $this->fieldOptions[$nmField] : []);
-            
-            $val = "";
-            if (isset($this->fieldCallback[$nmField]))
-            {
-              $callback   = $this->fieldCallback[$nmField]["callback"];
-              $parameters = array_merge([$obj->$nmField], $this->fieldCallback[$nmField]["parameters"]);
-              
-              $val = call_user_func_array($callback, $parameters);
-            }
-            else
-              $val = $obj->$nmField;
-            
-            $this->table->openCell($val, $options);
-          }
-          
-          //Extra Fields
-          if (sizeof($this->extraFields))
-          {
-            foreach ($this->extraFields as $arrExtra)
-            {
-              if ($arrExtra["url"])
-              {
-                $url = $arrExtra["url"];
-                $id = $arrExtra["urlId"];
-                
-                if (sizeof($arrExtra["urlData"]))
-                {
-                  foreach ($arrExtra["urlData"] as $urlField)
-                  {
-                    $url .= "/{$obj->$urlField}";
-                    $id .= "_{$obj->$urlField}";
-                  }
-                }
-                
-                $arrExtra["content"] = "<a href=\"{$url}\" class=\"{$arrExtra["urlClass"]}\" id=\"{$id}\">{$arrExtra["content"]}</a>";
-              }
-              
-              $this->table->openCell($arrExtra["content"], ["style" => "text-align: center", "class" => $arrExtra["colClass"]]);
-            }
-          } //extra fields
-        } //foreach ($this->data as $obj)
+          $this->table->openCell("<i>Sem Dados</i>", ["class" => "col-12", "colspan" => $colspan]);
+        }
         
         $this->table->closeTableBody();
       } //if (is_object($this->data))

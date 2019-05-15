@@ -2,8 +2,6 @@
   namespace VMaker;
   
   use VMaker\vPrimitiveObject;
-  use VMaker\VPanel;
-  
   use Collective\Html\FormFacade as Form;
   
   /**
@@ -17,25 +15,25 @@
     protected $data;
     
     /**
+     * Route to clean session
      * @var string
      */
-    protected $panelClass = "panel panel-success";
-    
-    /**
-     * @var string
-     */
-    protected $panelTitle = "Filtros";
-    
-    /**
-     * @var string
-     */
-    protected $fieldDivClass = "alert alert-warning alert-dismissible";
-    
+    protected $route;
     
     /**
      * @var array
      */
-    protected $fieldOptions = array();
+    protected $fieldCallback = array();
+    
+    /**
+     * Constructor
+     * @param string $route (Route to clean session)
+     */
+    public function __construct($route)
+    {
+      $this->route = $route;
+      $this->class = "alert alert-warning alert-dismissible";
+    }
     
     /**
      * Makes the div with filters
@@ -43,6 +41,9 @@
      */
     public function make()
     {
+      if (!strlen(trim($this->route)))
+        return;
+      
       parent::make();
       
       //Output
@@ -50,56 +51,59 @@
       
       if (is_array($this->data) && sizeof($this->data))
       {
-        $idFilter = false;
-        $out = "";
+        $this->output = "";
         
-        $out .= <<<JS
+        $this->output .= <<<JS
           <script>
-            function tese(field)
+            function cleanFilter(field)
             {
               var csrf_token = $('meta[name=\"csrf-token\"]').attr('content');
               data           = {'field': field, '_token': csrf_token};
               
               $.ajax({
-                url: '',
+                headers: {'X-CSRF-Token': csrf_token},
+                url: '{$this->route}',
                 data: data,
                 type: 'POST',
-                success: function(nomeUf){
-                  
+                success: function(result){
+                  self.location.reload();
+                },
+                error: function(response){
+                  Swal.fire({
+                    type: 'error',
+                    title: 'Oops...',
+                    text: 'Erro ao excluir filtro',
+                  }).then((result) => {
+                    location.reload();
+                  });
                 }
               });
             }
           </script>
-                
 JS;
         
         foreach ($this->data as $var => $label)
         {
-          if ($vl = session($var))
+          if (strlen(trim(session($var))))
           {
-            $idFilter = true;
+            $vl = session($var);
             
-            $class = $this->fieldDivClass;
+            if (isset($this->fieldCallback[$var]))
+            {
+              $callback   = $this->fieldCallback[$var]["callback"];
+              $parameters = array_merge([$vl], $this->fieldCallback[$var]["parameters"]);
+              
+              $vl = call_user_func_array($callback, $parameters);
+            }
             
-            if (isset($this->fieldOptions[$var]["class"]))
-              $class .= " {$this->fieldOptions[$var]["class"]}";
+            $this->output .= "<div class=\"{$this->class} col-lg-2 col-md-2 col-sm-2 col-xs-2\" role=\"alert\">";
+            $this->output .= "<button onClick=\"cleanFilter('$var')\" type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>";
             
-            $out .= "<div class=\"{$class}\" role=\"alert\">";
-            $out .= "<button onClick=\"\" type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>";
-            
-            
-            $out .= "<p><b>{$label}</b></p>";
-            $out .= "<p>{$vl}</p>";
-            $out .= "</div>";
+            $this->output .= "<p><b>{$label}</b></p>";
+            $this->output .= "<p>{$vl}</p>";
+            $this->output .= "</div>";
           }
         }
-        
-        $panel = new VPanel();
-        $panel->setClass($this->panelClass);
-        $panel->addHeading($this->panelTitle);
-        $panel->addBody($out);
-        
-        $this->output = $panel->make();
       }
       
       return $this->output;
@@ -116,31 +120,22 @@ JS;
     }
     
     /**
-     * Set extra class for field
+     * CallBack
      * @param string $field
-     * @param string $class
+     * @param string $callback function
+     * @param array $parameters function params
      */
-    public function setFieldExtraClass($field, $class)
+    public function setFieldCallback($field, $callback, $parameters = [])
     {
-      if (strlen(trim($field)) && strlen(trim($class)))
-        $this->fieldOptions[$field]["class"] = $class;
-    }
-    
-    /**
-     * Filter panel class
-     * @param string $panelClass
-     */
-    public function setPanelClass($panelClass)
-    {
-      $this->panelClass = $panelClass;
-    }
-
-    /**
-     * Filter Panel title
-     * @param string $panelTitle
-     */
-    public function setPanelTitle($panelTitle)
-    {
-      $this->panelTitle = $panelTitle;
+      if (strlen(trim($field)) && strlen(trim($callback)))
+      {
+        if (function_exists($callback))
+        {
+          $this->fieldCallback[$field] = [
+              "callback" => $callback,
+              "parameters" => $parameters
+          ];
+        }
+      }
     }
   }
