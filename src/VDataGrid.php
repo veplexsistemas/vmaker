@@ -77,7 +77,7 @@ class VDataGrid extends vPrimitiveObject
         $dsTotal = "";
         
         if ($this->data->total())
-          $dsTotal .= "<br/>Listando {$this->data->firstItem()} a {$this->data->lastItem()} de {$this->data->total()}";
+          $dsTotal .= "Listando {$this->data->firstItem()} a {$this->data->lastItem()} de {$this->data->total()}";
         
         $this->table->openRow(["class" => $this->rowClass]);
         $this->table->openHeader($this->data->links() . $dsTotal, ["class" => "col-12", "colspan" => $colspan]);

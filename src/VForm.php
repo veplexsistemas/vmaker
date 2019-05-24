@@ -56,6 +56,16 @@
     protected $errors;
     
     /**
+     * @var boolean
+     */
+    protected $idOpenedRow;
+    
+    /**
+     * @var boolean
+     */
+    protected $idOpenedCell;
+    
+    /**
      * Makes the Html Form
      * @return string Html content
      */
@@ -97,6 +107,13 @@
       $this->output .= Form::open($this->arrExtra);
       
       $this->output .= $this->htmlInput;
+      
+      if ($this->idOpenedRow)
+        $this->output .= "</div>";
+      
+      if ($this->idOpenedCell)
+        $this->output .= "</div>";
+      
       $this->output .= Form::close();
       
       return $this->output;
@@ -176,5 +193,47 @@
     public function setErrors(\Illuminate\Support\ViewErrorBag $errors)
     {
       $this->errors = $errors;
+    }
+    
+    /**
+     * Open row div for input field
+     * @param string $class
+     * @param array $options
+     * @return string Html content
+     */
+    public function openRow($class = "row", $options = [])
+    {
+      if (!strlen(trim($class)))
+        return;
+      
+      if ($this->idOpenedRow)
+        $this->htmlInput .= "</div>";
+      
+      $dsExtra = $this->formatOptions($options);
+      
+      $this->htmlInput .= "<div class=\"{$class}\"" . (strlen($dsExtra) ? " {$dsExtra}" : "") . ">";
+      
+      $this->idOpenedRow = true;
+    }
+    
+    /**
+     * Open col div for input field
+     * @param string $class
+     * @param array $options
+     * @return string Html content
+     */
+    public function openCell($class = "col", $options = [])
+    {
+      if (!strlen(trim($class)))
+        return;
+      
+      if ($this->idOpenedCell)
+        $this->htmlInput .= "</div>";
+      
+      $dsExtra = $this->formatOptions($options);
+      
+      $this->htmlInput .= "<div class=\"{$class}\"" . (strlen($dsExtra) ? " {$dsExtra}" : "") . ">";
+      
+      $this->idOpenedCell = true;
     }
   }
