@@ -96,6 +96,11 @@
     /**
      * @var string
      */
+    protected $pattern;
+    
+    /**
+     * @var string
+     */
     protected $output;
     
     /**
@@ -172,6 +177,9 @@
       
       if (strlen($this->style))
         $this->arrExtra = array_merge(['style' => $this->style], $this->arrExtra);
+      
+      if (strlen($this->pattern))
+        $this->arrExtra = array_merge(['pattern' => $this->pattern], $this->arrExtra);
     }
     
     /**
@@ -316,5 +324,13 @@
     public function setErrorClass($errorClass)
     {
       $this->errorClass = $errorClass;
+    }
+    
+    /**
+     * @param string $pattern
+     */
+    public function setPattern($pattern) 
+    {
+      $this->pattern = $pattern;
     }
   }
