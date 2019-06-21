@@ -34,4 +34,20 @@
       
       return $this->output;
     }
+    
+    /**
+     * @param int $max
+     */
+    public function setMax($max)
+    {
+      $this->arrExtra["max"] = $max;
+    }
+    
+    /**
+     * @param int $min
+     */
+    public function setMin($min)
+    {
+      $this->arrExtra["min"] = $min;
+    }
   }
