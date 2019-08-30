@@ -108,13 +108,13 @@ JS;
             
             $this->output .= <<<HTML
               <a href="#" style="cursor:default" class="{$this->class}">
-                <span class="{$this->divTextClass}><b>{$label}</b>: {$vl}</span>
+                <span class="{$this->divTextClass}"><b>{$label}</b>: {$vl}</span>
                   <span class="{$this->divButtonClass}">
                     <button type="button" class="close" aria-label="Dismiss" onClick="cleanFilter('{$var}')">
                       <span aria-hidden="true">&times;</span>
                     </button>
                   </span>
-              </a>
+              </a>&nbsp;
 HTML;
           }
         }
