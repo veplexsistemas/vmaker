@@ -26,13 +26,23 @@
     protected $fieldCallback = array();
     
     /**
+     * @var string
+     */
+    protected $divTextClass = "text";
+    
+    /**
+     * @var string
+     */
+    protected $divButtonClass = "icon text-white-50";
+    
+    /**
      * Constructor
      * @param string $route (Route to clean session)
      */
     public function __construct($route)
     {
       $this->route = $route;
-      $this->class = "alert alert-warning alert-dismissible";
+      $this->class = "btn btn-info btn-icon-split btn-sm";
     }
     
     /**
@@ -96,12 +106,16 @@ JS;
               $vl = call_user_func_array($callback, $parameters);
             }
             
-            $this->output .= "<div class=\"{$this->class} col-lg-2 col-md-2 col-sm-2 col-xs-2\" role=\"alert\">";
-            $this->output .= "<button onClick=\"cleanFilter('$var')\" type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>";
-            
-            $this->output .= "<p><b>{$label}</b></p>";
-            $this->output .= "<p>{$vl}</p>";
-            $this->output .= "</div>";
+            $this->output .= <<<HTML
+              <a href="#" style="cursor:default" class="{$this->class}">
+                <span class="{$this->divTextClass}><b>{$label}</b>: {$vl}</span>
+                  <span class="{$this->divButtonClass}">
+                    <button type="button" class="close" aria-label="Dismiss" onClick="cleanFilter('{$var}')">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </span>
+              </a>
+HTML;
           }
         }
       }
@@ -137,5 +151,21 @@ JS;
           ];
         }
       }
+    }
+    
+    /**
+     * @param string $divTextClass
+     */
+    public function setDivTextClass($divTextClass)
+    {
+      $this->divTextClass = $divTextClass;
+    }
+    
+    /**
+     * @param string $divButtonClass
+     */
+    function setDivButtonClass($divButtonClass)
+    {
+      $this->divButtonClass = $divButtonClass;
     }
   }
