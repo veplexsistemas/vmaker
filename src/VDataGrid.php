@@ -294,7 +294,7 @@ class VDataGrid extends vPrimitiveObject
    */
   public function getPaginationHtml()
   {
-    if ($this->data instanceof LengthAwarePaginator && $this->showPagination)
+    if ($this->data instanceof LengthAwarePaginator)
       return $this->data->links();
   }  
   
