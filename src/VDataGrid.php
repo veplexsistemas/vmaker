@@ -38,6 +38,16 @@ class VDataGrid extends vPrimitiveObject
   protected $showPagination = true;
   
   /**
+   * @var boolean
+   */
+  protected $showPaginationTotal = true;
+  
+  /**
+   * @var string
+   */
+  protected $noRecordsLabel = "Sem dados";
+  
+  /**
    * @var array
    */
   protected $extraFields = [];
@@ -76,7 +86,7 @@ class VDataGrid extends vPrimitiveObject
       {
         $dsTotal = "";
         
-        if ($this->data->total())
+        if ($this->data->total() && $this->showPaginationTotal)
           $dsTotal .= "<br/>Listando {$this->data->firstItem()} a {$this->data->lastItem()} de {$this->data->total()}";
         
         $this->table->openRow(["class" => $this->rowClass]);
@@ -171,7 +181,7 @@ class VDataGrid extends vPrimitiveObject
         else
         {
           $this->table->openRow(["class" => $this->rowClass]);
-          $this->table->openCell("<i>Sem Dados</i>", ["class" => "col-12", "colspan" => $colspan]);
+          $this->table->openCell("<i>{$this->noRecordsLabel}</i>", ["class" => "col-12", "colspan" => $colspan]);
         }
         
         $this->table->closeTableBody();
@@ -277,5 +287,30 @@ class VDataGrid extends vPrimitiveObject
         ];
       }
     }
+  }
+  
+  /**
+   * @return string
+   */
+  public function getPaginationHtml()
+  {
+    if ($this->data instanceof LengthAwarePaginator && $this->showPagination)
+      return $this->data->links();
+  }  
+  
+  /**
+   * @param boolean $showPaginationTotal
+   */
+  public function setShowPaginationTotal($showPaginationTotal)
+  {
+    $this->showPaginationTotal = $showPaginationTotal;
+  }
+  
+  /**
+   * @param string $noRecordsLabel
+   */
+  public function setNoRecordsLabel($noRecordsLabel)
+  {
+    $this->noRecordsLabel = $noRecordsLabel;
   }
 }
