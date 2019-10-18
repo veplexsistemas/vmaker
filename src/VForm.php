@@ -108,10 +108,10 @@
       
       $this->output .= $this->htmlInput;
       
-      if ($this->idOpenedRow)
+      if ($this->idOpenedCell)
         $this->output .= "</div>";
       
-      if ($this->idOpenedCell)
+      if ($this->idOpenedRow)
         $this->output .= "</div>";
       
       $this->output .= Form::close();
@@ -140,6 +140,12 @@
       
       if ($object instanceof VInputFile)
         $this->enctype = "multipart/form-data";
+      
+      if ($this->idOpenedCell)
+      {
+        $this->htmlInput .= "</div>";
+        $this->idOpenedCell = false;
+      }
     }
     
     /**
@@ -235,5 +241,17 @@
       $this->htmlInput .= "<div class=\"{$class}\"" . (strlen($dsExtra) ? " {$dsExtra}" : "") . ">";
       
       $this->idOpenedCell = true;
+    }
+    
+    /**
+     * Add Html content on form
+     * @param string $content
+     */
+    public function addContent($content)
+    {
+      if (!strlen(trim($content)))
+        return;
+      
+      $this->htmlInput .= $content;
     }
   }
