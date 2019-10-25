@@ -57,6 +57,26 @@ class VDataGrid extends vPrimitiveObject
    */
   protected $rowClass = "row";
   
+  /**
+   * @var array
+   */
+  protected $totalFields = [];
+  
+  /**
+   * @var string
+   */
+  protected $totalLabel = "Total";
+  
+  /**
+   * @var array
+   */
+  protected $total = [];
+  
+  /**
+   * @var boolean
+   */
+  protected $mergeTotalCell = false;
+  
   public function __construct()
   {
     $this->class = "table table-hover table-responsive table-sm";
@@ -176,6 +196,21 @@ class VDataGrid extends vPrimitiveObject
                 $this->table->openCell($arrExtra["content"], ["style" => "text-align: center", "class" => $arrExtra["colClass"]]);
               }
             } //extra fields
+            
+            //Total
+            if (is_array($this->totalFields) && sizeof($this->totalFields))
+            {
+              foreach ($this->totalFields as $field)
+              {
+                if (isset($obj->$field) && is_numeric($obj->$field))
+                {
+                  if (!isset($this->total[$field]))
+                    $this->total[$field] = 0;
+                  
+                  $this->total[$field] += floatval($obj->$field);
+                }
+              }
+            }
           }//foreach ($this->data as $obj)
         }
         else
@@ -185,6 +220,54 @@ class VDataGrid extends vPrimitiveObject
         }
         
         $this->table->closeTableBody();
+        
+        //Build Total
+        if (sizeof($this->total))
+        {
+          $this->table->openTableFoot();
+          $this->table->openRow(["class" => $this->rowClass]);
+          
+          $j = 0;
+          
+          if ($this->mergeTotalCell && sizeof($this->total) == 1)
+            $this->table->openCell("<b>{$this->totalLabel}</b>", ["style" => "text-align: right", "colspan" => ($colspan - 1)]);
+          
+          foreach ($this->fields as $field => $label)
+          {
+            if (isset($this->total[$field]))
+            {
+              $vlTotal = $this->total[$field];
+              
+              $options = (isset($this->fieldOptions[$field]) ? $this->fieldOptions[$field] : []);
+              
+              $val = "";
+              
+              if (isset($this->fieldCallback[$nmField]))
+              {
+                $callback   = $this->fieldCallback[$field]["callback"];
+                $parameters = array_merge([$vlTotal], $this->fieldCallback[$field]["parameters"]);
+                
+                $val = call_user_func_array($callback, $parameters);
+              }
+              else
+                $val = $vlTotal;
+                
+              $this->table->openCell("<b>{$val}</b>", $options);
+            }
+            elseif (!$this->mergeTotalCell)
+            {
+              if (!$j)
+                $this->table->openCell("<b>{$this->totalLabel}</b>", ["style" => "text-align: center"]);
+              else
+                $this->table->openCell();  
+            }
+            
+            $j++;
+          }
+          
+          $this->table->closeTableFoot();
+        }
+        
       } //if (is_object($this->data))
     } //if (is_array($this->fields) && sizeof($this->fields))
     
@@ -312,5 +395,29 @@ class VDataGrid extends vPrimitiveObject
   public function setNoRecordsLabel($noRecordsLabel)
   {
     $this->noRecordsLabel = $noRecordsLabel;
+  }
+  
+  /**
+   * @param array $totalFields
+   */
+  public function setTotalFields($totalFields)
+  {
+    $this->totalFields = $totalFields;
+  }
+  
+  /**
+   * @param string $totalLabel
+   */
+  public function setTotalLabel($totalLabel)
+  {
+    $this->totalLabel = $totalLabel;
+  }
+  
+  /**
+   * @param boolean $mergeTotalCell
+   */
+  public function setMergeTotalCell($mergeTotalCell)
+  {
+    $this->mergeTotalCell = $mergeTotalCell;
   }
 }
