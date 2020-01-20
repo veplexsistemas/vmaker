@@ -11,13 +11,27 @@
     /**
      * @var string
      */
+    protected $headerId = "";
+    
+    /**
+     * @var string
+     */
     protected $bodyClass = "card-body";
+    
+    /**
+     * @var string
+     */
+    protected $bodyId = "";
     
     /**
      * @var string
      */
     protected $footerClass = "card-footer";
     
+    /**
+     * @var string
+     */
+    protected $footerId = "";
     
     public function __construct()
     {
@@ -29,7 +43,7 @@
      */
     public function addHeader($content)
     {
-      $this->output .= "<div class=\"{$this->headerClass}\">{$content}</div>";
+      $this->output .= "<div class=\"{$this->headerClass}\" id=\"{$this->headerId}\">{$content}</div>";
     }
     
     /**
@@ -37,7 +51,7 @@
      */
     public function addBody($content)
     {
-      $this->output .= "<div class=\"{$this->bodyClass}\">{$content}</div>";
+      $this->output .= "<div class=\"{$this->bodyClass}\" id=\"{$this->bodyId}\">{$content}</div>";
     }
     
     /**
@@ -45,7 +59,7 @@
      */
     public function addFooter($content)
     {
-      $this->output .= "<div class=\"{$this->footerClass}\">{$content}</div>";
+      $this->output .= "<div class=\"{$this->footerClass}\" id=\"{$this->footerId}\">{$content}</div>";
     }
     
     public function make()
@@ -77,5 +91,29 @@
     public function setFooterClass($footerClass)
     {
       $this->footerClass = $footerClass;
+    }
+    
+    /**
+     * @param string $bodyId
+     */
+    public function setBodyId(string $bodyId)
+    {
+        $this->bodyId = $bodyId;
+    }
+    
+    /**
+     * @param string $headerId
+     */
+    public function setHeaderId(string $headerId)
+    {
+        $this->headerId = $headerId;
+    }
+    
+    /**
+     * @param string $footerId
+     */
+    public function setFooterId(string $footerId)
+    {
+        $this->footerId = $footerId;
     }
   }
