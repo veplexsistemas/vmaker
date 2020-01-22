@@ -135,7 +135,7 @@ class VDataGrid extends vPrimitiveObject
       {
         foreach ($this->extraFields as $arrExtra)
         {
-          $options = ["style" => "text-align: center"];
+          $options = ["style" => $this->headerStyle];
           
           if (isset($arrExtra["colClass"]))
             $options = array_merge($options, ["class" => $arrExtra["colClass"]]);
