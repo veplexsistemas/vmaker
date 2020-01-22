@@ -73,6 +73,11 @@ class VDataGrid extends vPrimitiveObject
   protected $total = [];
   
   /**
+   * @var string
+   */
+  protected $headerStyle = "text-align: center";
+  
+  /**
    * @var boolean
    */
   protected $mergeTotalCell = false;
@@ -118,7 +123,7 @@ class VDataGrid extends vPrimitiveObject
       
       foreach ($this->fields as $nmField => $lbField)
       {
-        $options = ["style" => "text-align: center"];
+        $options = ["style" => $this->headerStyle];
         
         if (isset($this->fieldOptions[$nmField]["class"]))
           $options = array_merge($options, ["class" => $this->fieldOptions[$nmField]["class"]]);
@@ -419,5 +424,13 @@ class VDataGrid extends vPrimitiveObject
   public function setMergeTotalCell($mergeTotalCell)
   {
     $this->mergeTotalCell = $mergeTotalCell;
+  }
+  
+  /**
+   * @param string $headerStyle
+   */
+  public function setHeaderStyle(string $headerStyle)
+  {
+    $this->headerStyle = $headerStyle;
   }
 }
